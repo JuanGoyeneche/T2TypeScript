@@ -8,6 +8,23 @@ const series = [
     new Serie(6, "A Very English Scandal", "BBC", 2, "A Very English Scandal is a fact-based three-part British television comedy-drama miniseries based on John Preston's book of the same name.", "https://www.bbc.co.uk/programmes/p065smy4", "https://i.imgur.com/D4y3DrQ.jpg")
 ];
 const tableBody = document.querySelector("tbody");
+const detailContainer = document.getElementById("seriesInfo");
+function showSerieDetail(serie) {
+    if (!detailContainer)
+        return;
+    detailContainer.innerHTML = `
+    <div class="card">
+      <img src="${serie.image}" class="card-img-top" alt="${serie.name} image">
+      <div class="card-body">
+        <h5 class="card-title">${serie.name}</h5>
+        <p class="card-text">
+          ${serie.description}
+        </p>
+        <a class="card-text" href="${serie.link}">${serie.link}</a>
+      </div>
+    </div>
+  `;
+}
 if (tableBody) {
     tableBody.innerHTML = "";
     series.forEach((serie) => {
@@ -18,16 +35,9 @@ if (tableBody) {
       <td>${serie.channel}</td>
       <td>${serie.seasons}</td>
     `;
+        row.addEventListener("click", () => {
+            showSerieDetail(serie);
+        });
         tableBody.appendChild(row);
     });
-    let sumaTemporadas = 0;
-    for (let i = 0; i < series.length; i++) {
-        sumaTemporadas = sumaTemporadas + series[i].seasons;
-    }
-    const prom = sumaTemporadas / series.length;
-    const avgRow = document.createElement("tr");
-    avgRow.innerHTML = `
-    <td colspan="4" class="fw-bold">Seasons average: ${Math.round(prom)}</td>
-  `;
-    tableBody.appendChild(avgRow);
 }

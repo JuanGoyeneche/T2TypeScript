@@ -16,10 +16,27 @@ const series: Serie[] = [
 ];
 
 const tableBody: HTMLElement | null = document.querySelector("tbody");
+const detailContainer: HTMLElement | null = document.getElementById("seriesInfo");
+
+function showSerieDetail(serie: Serie): void {
+  if (!detailContainer) return;
+  detailContainer.innerHTML = `
+    <div class="card">
+      <img src="${serie.image}" class="card-img-top" alt="${serie.name} image">
+      <div class="card-body">
+        <h5 class="card-title">${serie.name}</h5>
+        <p class="card-text">
+          ${serie.description}
+        </p>
+        <a class="card-text" href="${serie.link}">${serie.link}</a>
+      </div>
+    </div>
+  `;
+}
 
 if (tableBody) {
   tableBody.innerHTML = "";
-  
+
   series.forEach((serie) => {
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -28,20 +45,11 @@ if (tableBody) {
       <td>${serie.channel}</td>
       <td>${serie.seasons}</td>
     `;
+
+    row.addEventListener("click", () => {
+      showSerieDetail(serie);
+    });
+
     tableBody.appendChild(row);
   });
-  
-let sumaTemporadas: number = 0;
-
-for (let i = 0; i < series.length; i++) {
-  sumaTemporadas = sumaTemporadas + series[i].seasons;
-}
-
-const prom: number = sumaTemporadas / series.length;
-  
-  const avgRow = document.createElement("tr");
-  avgRow.innerHTML = `
-    <td colspan="4" class="fw-bold">Seasons average: ${Math.round(prom)}</td>
-  `;
-  tableBody.appendChild(avgRow);
 }
